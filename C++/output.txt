@@ -1,0 +1,5 @@
+Enter a Number : 
+
+2
+3
+5

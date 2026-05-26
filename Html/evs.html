@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rainwater Harvesting – Sonu Kumar | SBU</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --teal:#00e5c8;--blue:#0af;--dark:#020d18;--mid:#071e35;--card:#0a2540;
+  --gold:#ffd700;--green:#00e676;--red:#ff4444;--white:#e8f4ff;
+  --glow:0 0 20px rgba(0,229,200,.45);--glow2:0 0 40px rgba(0,229,200,.25);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);color:var(--white);font-family:'Rajdhani',sans-serif;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--dark);}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--teal),var(--blue));border-radius:2px;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,229,200,.012) 2px,rgba(0,229,200,.012) 4px);pointer-events:none;z-index:9999;}
+nav{position:fixed;top:0;left:0;width:100%;z-index:1000;background:rgba(2,13,24,.95);backdrop-filter:blur(18px);border-bottom:1px solid rgba(0,229,200,.2);padding:.5rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:.7rem;}
+.nav-logo-name{font-family:'Orbitron',monospace;font-size:.78rem;color:var(--teal);letter-spacing:.1em;line-height:1.3;}
+.nav-logo-sub{font-size:.6rem;color:rgba(232,244,255,.35);letter-spacing:.12em;}
+.nav-links{display:flex;gap:1.2rem;}
+.nav-links a{color:rgba(232,244,255,.45);font-size:.75rem;text-decoration:none;letter-spacing:.07em;transition:color .2s,text-shadow .2s;font-family:'Share Tech Mono',monospace;}
+.nav-links a:hover{color:var(--teal);text-shadow:var(--glow);}
+.rain-container{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.raindrop{position:absolute;width:1.5px;background:linear-gradient(to bottom,transparent,rgba(0,229,200,.5));animation:fall linear infinite;}
+@keyframes fall{from{transform:translateY(-80px);}to{transform:translateY(110vh);}}
+#cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:6rem 2rem 4rem;}
+#cover::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,200,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,200,.06) 1px,transparent 1px);background-size:44px 44px;animation:gridShift 20s linear infinite;z-index:1;}
+@keyframes gridShift{from{background-position:0 0;}to{background-position:44px 44px;}}
+#cover::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(0,229,200,.1) 0%,transparent 65%);z-index:1;}
+.cover-inner{position:relative;z-index:2;text-align:center;max-width:920px;width:100%;}
+.sbu-logo-wrap{display:flex;align-items:center;justify-content:center;gap:1.2rem;margin-bottom:2rem;animation:fadeDown .9s ease both;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-28px);}to{opacity:1;transform:translateY(0);}}
+.sbu-emblem{width:88px;height:88px;flex-shrink:0;filter:drop-shadow(0 0 22px rgba(0,229,200,.55));}
+.sbu-text{text-align:left;}
+.sbu-uni{font-family:'Orbitron',monospace;font-size:1.15rem;font-weight:700;color:var(--teal);letter-spacing:.09em;line-height:1.35;}
+.sbu-loc{font-size:.72rem;color:rgba(232,244,255,.4);letter-spacing:.14em;text-transform:uppercase;}
+.cover-rule{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--teal),var(--blue),var(--teal),transparent);margin:1.4rem 0;animation:fadeIn .9s .3s both;}
+.cover-course{font-family:'Share Tech Mono',monospace;font-size:.82rem;letter-spacing:.28em;color:rgba(0,229,200,.6);margin-bottom:.8rem;animation:fadeIn .9s .5s both;}
+.cover-h1{font-family:'Orbitron',monospace;font-size:clamp(2.2rem,7vw,5rem);font-weight:900;line-height:1.08;margin-bottom:.5rem;animation:fadeIn .9s .7s both;}
+.cover-h1 .hl{color:var(--teal);text-shadow:0 0 30px rgba(0,229,200,.6),0 0 60px rgba(0,229,200,.3);}
+.cover-tag{font-size:1.05rem;color:rgba(232,244,255,.5);letter-spacing:.06em;font-style:italic;margin-bottom:2.8rem;animation:fadeIn .9s .9s both;}
+.info-pills{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fadeIn .9s 1.1s both;}
+.pill{background:rgba(0,229,200,.06);border:1px solid rgba(0,229,200,.2);border-radius:10px;padding:.5rem 1rem;font-size:.8rem;transition:border-color .3s,box-shadow .3s;}
+.pill:hover{border-color:rgba(0,229,200,.5);box-shadow:var(--glow);}
+.pill strong{color:var(--teal);display:block;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.12rem;}
+.scroll-cue{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;font-size:.65rem;letter-spacing:.2em;color:rgba(0,229,200,.4);animation:bounce 2.2s infinite;z-index:2;font-family:'Share Tech Mono',monospace;}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(9px);}}
+.scroll-cue::before{content:'';width:1px;height:36px;background:linear-gradient(transparent,var(--teal));}
+@keyframes fadeIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.sec-wrap{width:100%;}
+.sec-wrap.alt{background:rgba(7,30,53,.4);}
+.sec-inner{max-width:1100px;margin:0 auto;padding:5rem 2rem;}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,200,.2),transparent);}
+.sec-tag{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.3em;color:var(--teal);opacity:.7;margin-bottom:.5rem;}
+.sec-h2{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,4vw,2.6rem);font-weight:700;line-height:1.18;margin-bottom:.5rem;}
+.sec-h2 .ac{color:var(--teal);}
+.sec-p{font-size:1rem;color:rgba(232,244,255,.55);line-height:1.65;max-width:640px;margin-bottom:2.5rem;}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .72s ease,transform .72s ease;}
+.reveal.vis{opacity:1;transform:none;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.4rem;}
+.stat-card{background:var(--card);border:1px solid rgba(0,229,200,.15);border-radius:14px;padding:1.8rem 1.4rem;text-align:center;transition:transform .3s,box-shadow .3s,border-color .3s;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,200,.05),transparent);pointer-events:none;}
+.stat-card::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);transition:left .5s;}
+.stat-card:hover::after{left:100%;}
+.stat-card:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(0,229,200,.2);border-color:rgba(0,229,200,.35);}
+.stat-num{font-family:'Orbitron',monospace;font-size:2.8rem;font-weight:900;line-height:1;}
+.stat-num.r{color:var(--red);text-shadow:0 0 20px rgba(255,68,68,.4);}
+.stat-num.b{color:var(--blue);text-shadow:0 0 20px rgba(0,170,255,.4);}
+.stat-num.t{color:var(--teal);text-shadow:var(--glow);}
+.stat-lbl{font-size:.85rem;color:rgba(232,244,255,.5);margin-top:.45rem;line-height:1.45;}
+.cv-wrap{background:rgba(7,30,53,.7);border:1px solid rgba(0,229,200,.12);border-radius:16px;overflow:hidden;margin:2rem 0;position:relative;}
+.cv-wrap::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,200,.03),transparent 50%,rgba(0,170,255,.03));pointer-events:none;z-index:1;}
+canvas{display:block;width:100%!important;}
+.cv-caption{text-align:center;font-size:.68rem;color:rgba(0,229,200,.4);letter-spacing:.13em;padding:.5rem;font-family:'Share Tech Mono',monospace;}
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.4rem;}
+.comp-card{background:var(--card);border-radius:14px;padding:1.7rem 1.4rem;border-left:3px solid var(--teal);transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden;}
+.comp-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--teal),transparent);}
+.comp-card:nth-child(2){border-left-color:var(--blue);}
+.comp-card:nth-child(3){border-left-color:var(--green);}
+.comp-card:nth-child(4){border-left-color:var(--gold);}
+.comp-card:hover{transform:translateY(-5px);box-shadow:0 10px 32px rgba(0,229,200,.16);}
+.comp-no{font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;opacity:.08;position:absolute;top:.4rem;right:.9rem;}
+.comp-ico{font-size:2.2rem;margin-bottom:.7rem;}
+.comp-ttl{font-family:'Orbitron',monospace;font-size:.8rem;letter-spacing:.07em;margin-bottom:.55rem;color:var(--teal);}
+.comp-card:nth-child(2) .comp-ttl{color:var(--blue);}
+.comp-card:nth-child(3) .comp-ttl{color:var(--green);}
+.comp-card:nth-child(4) .comp-ttl{color:var(--gold);}
+.comp-dsc{font-size:.86rem;color:rgba(232,244,255,.58);line-height:1.6;}
+.smart-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;}
+@media(max-width:680px){.smart-grid{grid-template-columns:1fr;}}
+.feat-list{display:flex;flex-direction:column;gap:1.1rem;}
+.feat{display:flex;gap:.9rem;align-items:flex-start;background:var(--card);border:1px solid rgba(0,229,200,.1);border-radius:12px;padding:1.1rem;transition:border-color .3s,box-shadow .3s;}
+.feat:hover{border-color:var(--teal);box-shadow:0 0 20px rgba(0,229,200,.1);}
+.feat-ico{font-size:1.9rem;flex-shrink:0;}
+.feat-ttl{font-family:'Orbitron',monospace;font-size:.75rem;color:var(--teal);margin-bottom:.25rem;}
+.feat-txt{font-size:.85rem;color:rgba(232,244,255,.55);line-height:1.5;}
+.phone{background:linear-gradient(160deg,#0d2840,#071e35);border:1px solid rgba(0,229,200,.3);border-radius:26px;padding:1.4rem;max-width:250px;margin:0 auto;box-shadow:0 0 60px rgba(0,229,200,.15),inset 0 0 30px rgba(0,229,200,.03);}
+.phone-scr{background:#020d18;border-radius:16px;padding:.9rem;border:1px solid rgba(0,229,200,.15);}
+.phone-hdr{font-family:'Orbitron',monospace;font-size:.58rem;color:var(--teal);letter-spacing:.14em;margin-bottom:.9rem;text-align:center;}
+.m-row{margin-bottom:.8rem;}
+.m-lbl{display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:.28rem;font-family:'Share Tech Mono',monospace;}
+.m-lbl span:last-child{color:var(--teal);}
+.m-bar{height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
+.m-fill{height:100%;border-radius:3px;animation:fillA 2s ease both;}
+@keyframes fillA{from{width:0;}to{width:var(--w);}}
+.ft{background:linear-gradient(90deg,var(--teal),var(--blue));}
+.fg{background:linear-gradient(90deg,var(--green),var(--teal));}
+.fb{background:linear-gradient(90deg,var(--blue),#7b2fff);}
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.8rem;}
+@media(max-width:640px){.ba-grid{grid-template-columns:1fr;}}
+.ba{border-radius:14px;padding:1.7rem;}
+.ba.bad{background:rgba(255,68,68,.04);border:1px solid rgba(255,68,68,.2);}
+.ba.good{background:rgba(0,230,118,.04);border:1px solid rgba(0,230,118,.2);}
+.ba-ttl{font-family:'Orbitron',monospace;font-size:.8rem;margin-bottom:1rem;letter-spacing:.07em;}
+.ba.bad .ba-ttl{color:var(--red);}
+.ba.good .ba-ttl{color:var(--green);}
+.ba-ul{list-style:none;display:flex;flex-direction:column;gap:.65rem;}
+.ba-ul li{font-size:.88rem;color:rgba(232,244,255,.62);padding-left:1.3rem;position:relative;line-height:1.45;}
+.ba.bad .ba-ul li::before{content:'✗';position:absolute;left:0;color:var(--red);}
+.ba.good .ba-ul li::before{content:'✓';position:absolute;left:0;color:var(--green);}
+.triple-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
+@media(max-width:680px){.triple-grid{grid-template-columns:1fr;}}
+.tri{border-radius:14px;padding:1.7rem 1.4rem;text-align:center;transition:transform .3s;}
+.tri:hover{transform:translateY(-5px);}
+.tri.eco{background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.2);}
+.tri.env{background:rgba(0,230,118,.04);border:1px solid rgba(0,230,118,.2);}
+.tri.soc{background:rgba(0,170,255,.04);border:1px solid rgba(0,170,255,.2);}
+.tri-ico{font-size:2.6rem;margin-bottom:.7rem;display:block;}
+.tri-ttl{font-family:'Orbitron',monospace;font-size:.8rem;margin-bottom:.9rem;}
+.tri.eco .tri-ttl{color:var(--gold);}
+.tri.env .tri-ttl{color:var(--green);}
+.tri.soc .tri-ttl{color:var(--blue);}
+.tri-ul{list-style:none;text-align:left;display:flex;flex-direction:column;gap:.5rem;}
+.tri-ul li{font-size:.85rem;color:rgba(232,244,255,.58);padding-left:.9rem;position:relative;}
+.tri-ul li::before{content:'→';position:absolute;left:0;opacity:.5;}
+#cta{text-align:center;padding:6rem 2rem;position:relative;overflow:hidden;}
+#cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(0,229,200,.08),transparent 70%);pointer-events:none;}
+.cta-h{font-family:'Orbitron',monospace;font-size:clamp(1.7rem,5vw,3.4rem);font-weight:900;margin-bottom:.9rem;}
+.cta-h span{color:var(--teal);text-shadow:var(--glow);}
+.cta-steps{display:flex;justify-content:center;gap:1.4rem;flex-wrap:wrap;margin:2.4rem 0;}
+.step{background:var(--card);border:1px solid rgba(0,229,200,.2);border-radius:12px;padding:1.2rem 1.5rem;text-align:center;min-width:145px;transition:transform .3s,box-shadow .3s,border-color .3s;}
+.step:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(0,229,200,.2);border-color:rgba(0,229,200,.5);}
+.step-n{font-family:'Orbitron',monospace;font-size:1.7rem;font-weight:900;color:var(--teal);display:block;margin-bottom:.35rem;text-shadow:var(--glow);}
+.step-l{font-size:.83rem;color:rgba(232,244,255,.58);}
+footer{background:rgba(7,30,53,.95);border-top:1px solid rgba(0,229,200,.1);padding:1.8rem;text-align:center;font-size:.75rem;color:rgba(232,244,255,.28);letter-spacing:.08em;font-family:'Share Tech Mono',monospace;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+@keyframes circuitBlink{0%,100%{opacity:.9;}50%{opacity:.3;}}
+</style>
+</head>
+<body>
+
+<div class="rain-container" id="rainCont"></div>
+
+<nav>
+  <div class="nav-logo">
+    <svg width="38" height="38" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <defs><filter id="ng"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <rect x="4" y="4" width="72" height="72" rx="8" fill="rgba(0,229,200,.06)" stroke="rgba(0,229,200,.4)" stroke-width="1.5"/>
+      <g stroke="rgba(0,229,200,.5)" stroke-width="1" fill="none" filter="url(#ng)">
+        <path d="M20 20 H35 V30 H50 V20 H60"/><path d="M20 40 H30 V50 H50 V40 H60"/>
+        <path d="M20 60 H40 V50"/><path d="M60 60 H50"/><path d="M40 20 V30"/><path d="M40 40 V50"/>
+      </g>
+      <g fill="rgba(0,229,200,.9)" filter="url(#ng)">
+        <circle cx="20" cy="20" r="2.5"/><circle cx="60" cy="20" r="2.5"/><circle cx="20" cy="40" r="2.5"/>
+        <circle cx="60" cy="40" r="2.5"/><circle cx="20" cy="60" r="2.5"/><circle cx="60" cy="60" r="2.5"/>
+        <circle cx="40" cy="20" r="2.5"/><circle cx="40" cy="50" r="2.5"/>
+      </g>
+      <rect x="28" y="28" width="24" height="24" rx="3" fill="rgba(0,229,200,.1)" stroke="rgba(0,229,200,.6)" stroke-width="1.2"/>
+      <g stroke="rgba(0,229,200,.7)" stroke-width="1">
+        <line x1="28" y1="33" x2="22" y2="33"/><line x1="28" y1="38" x2="22" y2="38"/><line x1="28" y1="43" x2="22" y2="43"/>
+        <line x1="52" y1="33" x2="58" y2="33"/><line x1="52" y1="38" x2="58" y2="38"/><line x1="52" y1="43" x2="58" y2="43"/>
+        <line x1="33" y1="28" x2="33" y2="22"/><line x1="40" y1="28" x2="40" y2="22"/><line x1="47" y1="28" x2="47" y2="22"/>
+        <line x1="40" y1="52" x2="40" y2="58"/>
+      </g>
+      <text x="40" y="44" text-anchor="middle" font-family="Orbitron,monospace" font-size="7" fill="rgba(0,229,200,.9)" font-weight="700">SBU</text>
+      <g stroke="rgba(0,229,200,.3)" stroke-width="1" fill="none">
+        <path d="M8 16 V8 H16"/><path d="M64 8 H72 V16"/><path d="M8 64 V72 H16"/><path d="M64 72 H72 V64"/>
+      </g>
+    </svg>
+    <div>
+      <div class="nav-logo-name">Sarala Birla University</div>
+      <div class="nav-logo-sub">Ranchi, Jharkhand</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#cover">HOME</a><a href="#crisis">CRISIS</a><a href="#system">SYSTEM</a>
+    <a href="#comp">PARTS</a><a href="#smart">SMART</a><a href="#roi">ROI</a>
+  </div>
+</nav>
+
+<div id="cover">
+  <div class="cover-inner">
+    <div class="sbu-logo-wrap">
+      <svg class="sbu-emblem" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="cg2"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="cg3"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <circle cx="80" cy="80" r="75" fill="none" stroke="rgba(0,229,200,.3)" stroke-width="1.5"/>
+        <circle cx="80" cy="80" r="68" fill="rgba(0,229,200,.03)" stroke="rgba(0,229,200,.12)" stroke-width="1"/>
+        <rect x="22" y="22" width="116" height="116" rx="14" fill="rgba(4,20,38,.95)" stroke="rgba(0,229,200,.35)" stroke-width="1.5" filter="url(#cg2)"/>
+        <g stroke="rgba(0,229,200,.45)" stroke-width="1.2" fill="none" filter="url(#cg2)">
+          <path d="M35 50 H55 V65 H80"/><path d="M80 65 H105 V50 H125"/><path d="M35 80 H55"/>
+          <path d="M105 80 H125"/><path d="M35 110 H55 V95 H80"/><path d="M80 95 H105 V110 H125"/>
+          <path d="M65 35 V55"/><path d="M80 35 V55"/><path d="M95 35 V55"/>
+          <path d="M65 105 V125"/><path d="M95 105 V125"/>
+        </g>
+        <g fill="rgba(0,229,200,.85)" filter="url(#cg2)">
+          <circle cx="35" cy="50" r="3"/><circle cx="125" cy="50" r="3"/><circle cx="35" cy="80" r="3"/>
+          <circle cx="125" cy="80" r="3"/><circle cx="35" cy="110" r="3"/><circle cx="125" cy="110" r="3"/>
+          <circle cx="65" cy="35" r="3"/><circle cx="80" cy="35" r="3"/><circle cx="95" cy="35" r="3"/>
+          <circle cx="65" cy="125" r="3"/><circle cx="95" cy="125" r="3"/>
+          <circle cx="55" cy="65" r="2.5"/><circle cx="105" cy="65" r="2.5"/>
+          <circle cx="55" cy="95" r="2.5"/><circle cx="105" cy="95" r="2.5"/>
+        </g>
+        <rect x="52" y="52" width="56" height="56" rx="6" fill="rgba(0,229,200,.08)" stroke="rgba(0,229,200,.6)" stroke-width="2" filter="url(#cg3)"/>
+        <g stroke="rgba(0,229,200,.6)" stroke-width="1.5">
+          <line x1="65" y1="52" x2="65" y2="44"/><line x1="80" y1="52" x2="80" y2="44"/><line x1="95" y1="52" x2="95" y2="44"/>
+          <line x1="65" y1="108" x2="65" y2="116"/><line x1="95" y1="108" x2="95" y2="116"/>
+          <line x1="52" y1="65" x2="44" y2="65"/><line x1="52" y1="80" x2="44" y2="80"/><line x1="52" y1="95" x2="44" y2="95"/>
+          <line x1="108" y1="65" x2="116" y2="65"/><line x1="108" y1="80" x2="116" y2="80"/><line x1="108" y1="95" x2="116" y2="95"/>
+        </g>
+        <text x="80" y="74" text-anchor="middle" font-family="Orbitron,monospace" font-size="13" fill="rgba(0,229,200,.95)" font-weight="900" filter="url(#cg3)">SBU</text>
+        <line x1="60" y1="80" x2="100" y2="80" stroke="rgba(0,229,200,.3)" stroke-width="1"/>
+        <text x="80" y="95" text-anchor="middle" font-family="Orbitron,monospace" font-size="7.5" fill="rgba(0,229,200,.65)" letter-spacing="1">TECH</text>
+        <g stroke="rgba(0,229,200,.4)" stroke-width="1.5" fill="none">
+          <path d="M28 40 V28 H40"/><path d="M120 28 H132 V40"/><path d="M28 120 V132 H40"/><path d="M120 132 H132 V120"/>
+        </g>
+        <circle cx="80" cy="80" r="3.5" fill="rgba(0,229,200,.9)" filter="url(#cg3)" style="animation:circuitBlink 2s infinite"/>
+      </svg>
+      <div class="sbu-text">
+        <div class="sbu-uni">Sarala Birla University</div>
+        <div class="sbu-loc">Birla Knowledge City · Ranchi, Jharkhand</div>
+      </div>
+    </div>
+
+    <div class="cover-rule"></div>
+    <div class="cover-course">Environmental Science · Class Presentation · 2025</div>
+    <h1 class="cover-h1">Rainwater<br/><span class="hl">Harvesting</span></h1>
+    <p class="cover-tag">Capturing the Sky — One Drop at a Time</p>
+    <div class="info-pills">
+      <div class="pill"><strong>Presented By</strong>Sonu Kumar</div>
+      <div class="pill"><strong>SBU ID</strong>SBU2500962</div>
+      <div class="pill"><strong>Subject</strong>Environmental Science</div>
+      <div class="pill"><strong>Teacher</strong>Dr. Sagnika Pradhan</div>
+    </div>
+  </div>
+  <div class="scroll-cue">SCROLL DOWN</div>
+</div>
+
+<div class="divider"></div>
+
+<div class="sec-wrap alt" id="crisis">
+<div class="sec-inner">
+  <div class="reveal">
+    <div class="sec-tag">// 01 — THE PROBLEM</div>
+    <h2 class="sec-h2">Our Cities Are <span class="ac">Thirsty.</span></h2>
+    <p class="sec-p">The global water crisis is not a future problem. It is happening right now, in every city, every single year.</p>
+  </div>
+  <div class="stats-grid reveal">
+    <div class="stat-card"><div class="stat-num r" id="cnt1">0</div><div class="stat-lbl">Billion people face<br/>water scarcity yearly</div></div>
+    <div class="stat-card"><div class="stat-num b">↓40%</div><div class="stat-lbl">Groundwater levels fallen<br/>in major cities</div></div>
+    <div class="stat-card"><div class="stat-num t" id="cnt2">0</div><div class="stat-lbl">Of all rainfall lost as<br/>urban surface runoff</div></div>
+    <div class="stat-card"><div class="stat-num r">2×</div><div class="stat-lbl">Water demand expected<br/>to double by 2050</div></div>
+  </div>
+  <div class="cv-wrap reveal">
+    <canvas id="crisisC" height="300"></canvas>
+    <div class="cv-caption">ANIMATION · URBAN RUNOFF — RAINWATER WASTED INTO DRAINS INSTEAD OF BEING HARVESTED</div>
+  </div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<div class="sec-wrap" id="system">
+<div class="sec-inner">
+  <div class="reveal">
+    <div class="sec-tag">// 02 — THE SOLUTION</div>
+    <h2 class="sec-h2">Rethinking <span class="ac">The System.</span></h2>
+    <p class="sec-p">Modern RWH is not just a barrel under a pipe. It is a complete engineered system that captures, filters, stores and reuses water right where it falls.</p>
+  </div>
+  <div class="cv-wrap reveal">
+    <canvas id="flowC" height="340"></canvas>
+    <div class="cv-caption">ANIMATION · COMPLETE RWH WATER FLOW — ROOF → FILTER → STORAGE TANK → DISTRIBUTION</div>
+  </div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<div class="sec-wrap alt" id="comp">
+<div class="sec-inner">
+  <div class="reveal">
+    <div class="sec-tag">// 03 — HOW IT WORKS</div>
+    <h2 class="sec-h2">The 4 <span class="ac">Critical Parts.</span></h2>
+    <p class="sec-p">Every modern RWH system is built on four key pillars — each one connected seamlessly to the next.</p>
+  </div>
+  <div class="comp-grid reveal">
+    <div class="comp-card"><div class="comp-no">01</div><div class="comp-ico">🏠</div><div class="comp-ttl">Catchment Area</div><div class="comp-dsc">Rooftop, terrace or paved surface — designed with the right slope and smooth material to collect the maximum amount of rainfall with zero loss.</div></div>
+    <div class="comp-card"><div class="comp-no">02</div><div class="comp-ico">🌀</div><div class="comp-ttl">Conveyance</div><div class="comp-dsc">Sealed gutters and integrated pipes carry rainwater directly to the filter unit — no contamination, no leaks, no evaporation loss.</div></div>
+    <div class="comp-card"><div class="comp-no">03</div><div class="comp-ico">⚗️</div><div class="comp-ttl">Filtration</div><div class="comp-dsc">Multi-stage vortex self-cleaning filters remove leaves, sand and fine particles automatically. Zero manual cleaning needed, ever.</div></div>
+    <div class="comp-card"><div class="comp-no">04</div><div class="comp-ico">🗄️</div><div class="comp-ttl">Storage &amp; Use</div><div class="comp-dsc">Smart underground modular tanks store clean water. IoT-connected pumps supply it on demand — toilets, gardens, cooling systems and more.</div></div>
+  </div>
+  <div class="cv-wrap reveal" style="margin-top:2rem;">
+    <canvas id="compC" height="280"></canvas>
+    <div class="cv-caption">ANIMATION · CROSS-SECTION SHOWING ALL 4 COMPONENTS WORKING TOGETHER</div>
+  </div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<div class="sec-wrap" id="smart">
+<div class="sec-inner">
+  <div class="reveal">
+    <div class="sec-tag">// 04 — SMART TECHNOLOGY</div>
+    <h2 class="sec-h2">Intelligence in <span class="ac">Harvesting.</span></h2>
+    <p class="sec-p">This is the real game-changer. Smart RWH systems do not just collect water — they think, predict and automatically adapt.</p>
+  </div>
+  <div class="smart-grid reveal">
+    <div class="feat-list">
+      <div class="feat"><div class="feat-ico">📡</div><div><div class="feat-ttl">IoT Sensors</div><div class="feat-txt">Monitor tank level, pH, turbidity and flow rate in real-time, 24 hours a day — no manual checks needed.</div></div></div>
+      <div class="feat"><div class="feat-ico">🧠</div><div><div class="feat-ttl">Predictive AI</div><div class="feat-txt">Reads 7-day weather forecast. Before heavy rain, it pre-releases stored water to make room for fresh capture — maximizing efficiency.</div></div></div>
+      <div class="feat"><div class="feat-ico">📱</div><div><div class="feat-ttl">Smartphone App</div><div class="feat-txt">See tank level, water quality score and monthly savings live from your phone. Instant alert if there is a leak or fault.</div></div></div>
+      <div class="feat"><div class="feat-ico">☁️</div><div><div class="feat-ttl">Cloud Reports</div><div class="feat-txt">Full historical data, usage trends and automated maintenance reminders — all stored securely in the cloud.</div></div></div>
+    </div>
+    <div>
+      <div class="phone">
+        <div class="phone-scr">
+          <div class="phone-hdr">◉ SMART RWH DASHBOARD</div>
+          <div class="m-row"><div class="m-lbl"><span>Tank Level</span><span>78%</span></div><div class="m-bar"><div class="m-fill ft" style="--w:78%"></div></div></div>
+          <div class="m-row"><div class="m-lbl"><span>Water Quality</span><span>Excellent</span></div><div class="m-bar"><div class="m-fill fg" style="--w:95%"></div></div></div>
+          <div class="m-row"><div class="m-lbl"><span>Monthly Savings</span><span>₹1,240</span></div><div class="m-bar"><div class="m-fill fb" style="--w:62%"></div></div></div>
+          <div class="m-row"><div class="m-lbl"><span>Next Rain</span><span style="color:#0af">Tomorrow</span></div><div class="m-bar"><div class="m-fill ft" style="--w:100%;animation:pulse 1.5s ease-in-out infinite;"></div></div></div>
+          <div style="margin-top:.9rem;font-size:.62rem;color:rgba(0,229,200,.5);text-align:center;letter-spacing:.12em;font-family:'Share Tech Mono',monospace;">● SYSTEM ONLINE — ALL CLEAR</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<div class="sec-wrap alt">
+<div class="sec-inner">
+  <div class="reveal">
+    <div class="sec-tag">// 05 — URBAN SOLUTIONS</div>
+    <h2 class="sec-h2">RWH for <span class="ac">Concrete Jungles.</span></h2>
+    <p class="sec-p">Even in the most densely built cities, modern RWH solutions fit in invisibly — under pavements, parking lots and roads.</p>
+  </div>
+  <div class="cv-wrap reveal">
+    <canvas id="baC" height="280"></canvas>
+    <div class="cv-caption">ANIMATION · SIDE-BY-SIDE COMPARISON — STANDARD vs PERMEABLE SURFACE WATER BEHAVIOUR</div>
+  </div>
+  <div class="ba-grid reveal">
+    <div class="ba bad">
+      <div class="ba-ttl">❌ Standard Parking Lot</div>
+      <ul class="ba-ul">
+        <li>Surface heats up to 60°C+</li><li>95% of rain becomes runoff</li><li>Zero water absorption</li>
+        <li>Causes downstream flooding</li><li>Groundwater never recharged</li>
+      </ul>
+    </div>
+    <div class="ba good">
+      <div class="ba-ttl">✅ Permeable Lot + RWH</div>
+      <ul class="ba-ul">
+        <li>Absorbs 80–100% of rainfall</li><li>Cools surface by 15–20°C</li><li>Recharges groundwater tables</li>
+        <li>Stores water for daily reuse</li><li>Prevents downstream flooding</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<div class="sec-wrap" id="roi">
+<div class="sec-inner">
+  <div class="reveal">
+    <div class="sec-tag">// 06 — WHY IT MAKES SENSE</div>
+    <h2 class="sec-h2">The Triple <span class="ac">Bottom Line.</span></h2>
+    <p class="sec-p">A system that pays for itself — economically, environmentally, and socially. All three win at once.</p>
+  </div>
+  <div class="triple-grid reveal">
+    <div class="tri eco"><span class="tri-ico">💰</span><div class="tri-ttl">ECONOMIC</div><ul class="tri-ul"><li>Cut water bills 30–50%</li><li>Lower stormwater fees</li><li>Increases property value</li><li>ROI in 3–7 years</li></ul></div>
+    <div class="tri env"><span class="tri-ico">🌿</span><div class="tri-ttl">ENVIRONMENTAL</div><ul class="tri-ul"><li>Restores groundwater</li><li>Reduces city flood risk</li><li>Less energy for treatment</li><li>Lowers carbon footprint</li></ul></div>
+    <div class="tri soc"><span class="tri-ico">🤝</span><div class="tri-ttl">SOCIAL</div><ul class="tri-ul"><li>Water security in droughts</li><li>Safer communities</li><li>Clean water reuse for all</li><li>City-wide resilience</li></ul></div>
+  </div>
+  <div class="cv-wrap reveal" style="margin-top:2rem;">
+    <canvas id="chartC" height="260"></canvas>
+    <div class="cv-caption">ANIMATION · WATER SAVINGS vs SYSTEM COST OVER 10 YEARS — SHOWING ROI BREAKEVEN POINT</div>
+  </div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<div id="cta">
+  <div style="position:relative;z-index:2;max-width:760px;margin:0 auto;">
+    <div class="reveal">
+      <div class="sec-tag" style="justify-content:center;display:flex;">// 07 — CONCLUSION</div>
+      <div class="cta-h">Let's Harvest <span>the Solution.</span></div>
+      <p style="color:rgba(232,244,255,.5);font-style:italic;font-size:1rem;margin-bottom:.5rem;">Start small. Think big. Act now.</p>
+    </div>
+    <div class="cta-steps reveal">
+      <div class="step"><span class="step-n">01</span><span class="step-l">Assess your roof<br/>&amp; water needs</span></div>
+      <div class="step"><span class="step-n">02</span><span class="step-l">Consult a certified<br/>RWH specialist</span></div>
+      <div class="step"><span class="step-n">03</span><span class="step-l">Install, monitor<br/>&amp; save water</span></div>
+    </div>
+    <p class="reveal" style="font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.2em;color:rgba(0,229,200,.5);margin-top:1.8rem;">EVERY DROP COUNTS · START TODAY</p>
+  </div>
+</div>
+
+<footer>
+  <div style="margin-bottom:.35rem;font-size:.78rem;color:rgba(232,244,255,.35);">Sonu Kumar &nbsp;·&nbsp; SBU2500962 &nbsp;·&nbsp; Environmental Science &nbsp;·&nbsp; Guided by Dr. Sagnika Pradhan</div>
+  Sarala Birla University, Ranchi, Jharkhand &nbsp;·&nbsp; 2025
+</footer>
+
+<script>
+(function(){
+  const c=document.getElementById('rainCont');
+  for(let i=0;i<65;i++){
+    const d=document.createElement('div');d.className='raindrop';
+    const l=Math.random()*100,dur=Math.random()*3+1.4,del=Math.random()*9,h=Math.random()*55+35;
+    d.style.cssText = `left:${l}%;height:${h}px;animation-duration:${dur}s;animation-delay:-${del}s;opacity:${(Math.random() * 0.45 + 0.1).toFixed(2)}`;
+    c.appendChild(d);
+  }
+})();
+
+
+const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis');});},{threshold:.14});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+function countUp(id, end, suf, dur = 1800) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const endVal = parseFloat(end);
+  const isF = end.includes('.');
+  let s = null;
+
+  function step(ts) {
+    if (!s) s = ts;
+    const p = Math.min((ts - s) / dur, 1);
+    const v = isF ? (endVal * p).toFixed(1) : Math.floor(endVal * p);
+    el.textContent = v + suf;
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = end + suf;
+  }
+  requestAnimationFrame(step);
+}
+const cob = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      countUp('cnt1', '2.4', 'B');
+      countUp('cnt2', '60', '%');
+      cob.unobserve(entry.target); // Changed from disconnect()
+    }
+  });
+}, { threshold: 0.5 });
+const sg=document.querySelector('.stats-grid');if(sg)cob.observe(sg);
+
+function initCanvas(id,h){
+  const cv=document.getElementById(id);if(!cv)return null;
+  const ctx=cv.getContext('2d');
+  function rs() {
+  const parent = cv.parentElement;
+  cv.width = parent.clientWidth - 4; // Subtracted pixels for border clearance
+  cv.height = h;
+}
+  rs();window.addEventListener('resize',rs);
+  return{cv,ctx,W:()=>cv.width,H:()=>cv.height};
+}
+
+/* CANVAS 1: CRISIS */
+(function(){
+  const c=initCanvas('crisisC',300);if(!c)return;
+  const{ctx}=c;let t=0,drops=[];
+  function W(){return c.cv.width;}function H(){return c.cv.height;}
+  function spawnDrop(){drops.push({x:Math.random()*W()*.75+W()*.08,y:-12,vx:(Math.random()-.5)*.4,vy:1.8+Math.random()*2.2,r:2+Math.random()*2});}
+  function frame(){
+    const w=W(),h=H();ctx.clearRect(0,0,w,h);t++;
+    const sk=ctx.createLinearGradient(0,0,0,h*.46);sk.addColorStop(0,'#030c18');sk.addColorStop(1,'#071e35');
+    ctx.fillStyle=sk;ctx.fillRect(0,0,w,h*.46);
+    ctx.fillStyle='#060f1c';ctx.fillRect(0,h*.46,w,h*.54);
+    ctx.fillStyle='#071828';
+    [[.04,.28,.11,.48],[.17,.18,.09,.58],[.28,.1,.13,.68],[.44,.22,.09,.44],[.56,.14,.11,.58],[.7,.26,.12,.42],[.84,.12,.11,.55]].forEach(([rx,ry,rw,rh])=>{
+      ctx.fillRect(w*rx,h*ry,w*rw,h*rh);
+      ctx.fillStyle='rgba(255,220,100,0.08)';
+      for(let wi=0;wi<3;wi++)for(let hi=0;hi<4;hi++){if(Math.random()>.5)ctx.fillRect(w*rx+wi*w*rw*.3+2,h*ry+hi*h*rh*.22+2,w*rw*.2,h*rh*.12);}
+      ctx.fillStyle='#071828';
+    });
+    [.18,.45,.72].forEach((p,i)=>{
+      ctx.fillStyle='rgba(160,200,240,0.1)';
+      [0,.5,.7,-.4].forEach((ox)=>{ctx.beginPath();ctx.arc(w*p+ox*w*.08+Math.sin(t*.008+i)*8,h*.12,w*.06,0,Math.PI*2);ctx.fill();});
+    });
+    if(t%4===0)spawnDrop();
+    drops=drops.filter(d=>{
+      d.x+=d.vx;d.y+=d.vy;
+      if(d.y>h*.46){
+        ctx.strokeStyle='rgba(255,80,80,0.5)';ctx.lineWidth=1.5;
+        ctx.beginPath();ctx.moveTo(d.x,h*.46);ctx.lineTo(d.x+25+Math.random()*15,h*.47);ctx.stroke();
+        return false;
+      }
+      const lg=ctx.createLinearGradient(d.x,d.y-12,d.x,d.y);
+      lg.addColorStop(0,'transparent');lg.addColorStop(1,'rgba(100,160,255,0.7)');
+      ctx.strokeStyle=lg;ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(d.x,d.y-10);ctx.lineTo(d.x,d.y);ctx.stroke();
+      return true;
+    });
+    ctx.fillStyle='rgba(255,80,80,0.5)';ctx.font='bold 10px Orbitron,monospace';ctx.textAlign='center';
+    ctx.fillText('⚠ 95% RAINWATER WASTED AS RUNOFF',w*.5,h*.92);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* CANVAS 2: FLOW */
+(function(){
+  const c=initCanvas('flowC',340);if(!c)return;
+  const{ctx}=c;let t=0,wdrops=[];
+  function W(){return c.cv.width;}function H(){return c.cv.height;}
+  function spawnW(x,y,tx,ty){wdrops.push({x,y,tx,ty,prog:0,spd:.012+Math.random()*.01});}
+  function frame(){
+    const w=W(),h=H();ctx.clearRect(0,0,w,h);t+=.016;
+    ctx.fillStyle='#040f1c';ctx.fillRect(0,0,w,h);
+    const stages=[
+      {x:.08,y:.15,w:.18,h:.2,label:'ROOF',ico:'🏠',col:'rgba(0,229,200,.6)'},
+      {x:.33,y:.15,w:.16,h:.2,label:'FILTER',ico:'⚗️',col:'rgba(0,170,255,.6)'},
+      {x:.58,y:.12,w:.18,h:.28,label:'STORAGE',ico:'🗄️',col:'rgba(0,230,118,.6)'},
+      {x:.82,y:.15,w:.14,h:.2,label:'REUSE',ico:'💧',col:'rgba(255,215,0,.6)'}
+    ];
+    ctx.setLineDash([6,5]);
+    for(let i=0;i<stages.length-1;i++){
+      const a=stages[i],b=stages[i+1];
+      const ax=w*(a.x+a.w),ay=h*(a.y+a.h*.5),bx=w*b.x,by=h*(b.y+b.h*.5);
+      ctx.strokeStyle=a.col.replace('.6','.25');ctx.lineWidth=3;
+      ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    stages.forEach((s,i)=>{
+      const bx=w*s.x,by=h*s.y,bw=w*s.w,bh=h*s.h;
+      ctx.fillStyle=s.col.replace('.6','.07');ctx.fillRect(bx,by,bw,bh);
+      ctx.strokeStyle=s.col;ctx.lineWidth=1.5;ctx.strokeRect(bx,by,bw,bh);
+      ctx.fillStyle=s.col;ctx.font='bold 9px Orbitron,monospace';ctx.textAlign='center';
+      ctx.fillText(s.label,bx+bw*.5,by+bh+16);
+      ctx.font='20px sans-serif';ctx.fillText(s.ico,bx+bw*.5,by+bh*.6);
+      if(i===2){
+        const wl=.3+Math.sin(t*.8)*.15;
+        const wg=ctx.createLinearGradient(0,by+bh*(1-wl),0,by+bh);
+        wg.addColorStop(0,'rgba(0,230,118,.3)');wg.addColorStop(1,'rgba(0,229,200,.15)');
+        ctx.fillStyle=wg;ctx.fillRect(bx+2,by+bh*(1-wl),bw-4,bh*wl);
+        ctx.fillStyle='rgba(0,230,118,.6)';ctx.font='7px Share Tech Mono';
+        ctx.fillText(Math.round((wl-.15)*100)+'%',bx+bw*.5,by+bh*.7);
+      }
+    });
+    if(t*60%18<1)spawnW(w*.26,h*.25,w*.33,h*.25);
+    if(t*60%22<1)spawnW(w*.49,h*.25,w*.58,h*.26);
+    if(t*60%25<1)spawnW(w*.76,h*.26,w*.82,h*.25);
+    wdrops=wdrops.filter(d=>{
+      d.prog+=d.spd;if(d.prog>1)return false;
+      const x=d.x+(d.tx-d.x)*d.prog,y=d.y+(d.ty-d.y)*d.prog;
+      ctx.fillStyle='rgba(0,229,200,0.8)';ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();
+      return true;
+    });
+    ctx.fillStyle='rgba(160,200,255,0.12)';
+    [w*.17,w*.5,w*.86].forEach((cx,i)=>{
+      ctx.beginPath();ctx.arc(cx+Math.sin(t+i)*5,h*.04,w*.045,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(cx+w*.025,h*.035,w*.035,0,Math.PI*2);ctx.fill();
+    });
+    for(let i=0;i<3;i++){
+      const rx=w*.08+w*.06*(i-.5)+Math.sin(t*3+i)*3,ry=h*.05+((t*80+i*30)%50);
+      if(ry<h*.15){
+        const lg=ctx.createLinearGradient(rx,ry-10,rx,ry);
+        lg.addColorStop(0,'transparent');lg.addColorStop(1,'rgba(0,229,200,.6)');
+        ctx.strokeStyle=lg;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(rx,ry-8);ctx.lineTo(rx,ry);ctx.stroke();
+      }
+    }
+    ctx.fillStyle='rgba(232,244,255,0.3)';ctx.font='8px Share Tech Mono';ctx.textAlign='center';
+    ctx.fillText('COMPLETE RAINWATER HARVESTING FLOW',w*.5,h*.95);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* CANVAS 3: COMPONENTS */
+(function(){
+  const c=initCanvas('compC',280);if(!c)return;
+  const{ctx}=c;let t=0;
+  function W(){return c.cv.width;}function H(){return c.cv.height;}
+  function frame(){
+    const w=W(),h=H();ctx.clearRect(0,0,w,h);t+=.016;
+    ctx.fillStyle='#040f1c';ctx.fillRect(0,0,w,h);
+    const sky=ctx.createLinearGradient(0,0,0,h*.4);sky.addColorStop(0,'#030c18');sky.addColorStop(1,'#071e35');
+    ctx.fillStyle=sky;ctx.fillRect(0,0,w,h*.4);
+    ctx.fillStyle='#061018';ctx.fillRect(0,h*.4,w,h*.6);
+    ctx.strokeStyle='rgba(0,229,200,.12)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,h*.4);ctx.lineTo(w,h*.4);ctx.stroke();
+    const cx=w*.5,ry=h*.08;
+    ctx.fillStyle='rgba(0,229,200,.12)';ctx.strokeStyle='rgba(0,229,200,.5)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(cx-w*.22,h*.22);ctx.lineTo(cx,ry);ctx.lineTo(cx+w*.22,h*.22);ctx.closePath();ctx.fill();ctx.stroke();
+    ctx.fillRect(cx-w*.2,h*.22,w*.4,h*.18);ctx.strokeRect(cx-w*.2,h*.22,w*.4,h*.18);
+    ctx.strokeStyle='rgba(0,170,255,.55)';ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.moveTo(cx+w*.2,h*.22);ctx.lineTo(cx+w*.2,h*.4);ctx.stroke();
+    ctx.strokeStyle='rgba(0,229,200,.4)';ctx.lineWidth=2;ctx.setLineDash([5,4]);
+    ctx.beginPath();ctx.moveTo(cx+w*.2,h*.4);ctx.lineTo(cx+w*.05,h*.4);ctx.lineTo(cx+w*.05,h*.55);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(0,229,200,.1)';ctx.strokeStyle='rgba(0,229,200,.55)';ctx.lineWidth=1.5;
+    ctx.fillRect(cx+w*.12,h*.42,w*.08,h*.1);ctx.strokeRect(cx+w*.12,h*.42,w*.08,h*.1);
+    ctx.fillStyle='rgba(0,229,200,.6)';ctx.font='7px Orbitron,monospace';ctx.textAlign='center';ctx.fillText('FILTER',cx+w*.16,h*.5);
+    const tkx=cx-w*.08,tky=h*.55,tkw=w*.16,tkh=h*.22;
+    ctx.fillStyle='rgba(0,170,255,.07)';ctx.strokeStyle='rgba(0,170,255,.4)';ctx.lineWidth=1.5;
+    ctx.fillRect(tkx,tky,tkw,tkh);ctx.strokeRect(tkx,tky,tkw,tkh);
+    const wl=.4+Math.sin(t*.7)*.12;
+    const wg=ctx.createLinearGradient(0,tky+tkh*(1-wl),0,tky+tkh);
+    wg.addColorStop(0,'rgba(0,170,255,.25)');wg.addColorStop(1,'rgba(0,229,200,.15)');
+    ctx.fillStyle=wg;ctx.fillRect(tkx+2,tky+tkh*(1-wl),tkw-4,tkh*wl);
+    ctx.fillStyle='rgba(0,170,255,.7)';ctx.font='7px Orbitron,monospace';ctx.fillText('STORAGE',cx,tky+tkh*.5);
+    ctx.strokeStyle='rgba(0,230,118,.45)';ctx.lineWidth=2;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(tkx,tky+tkh*.6);ctx.lineTo(tkx-w*.1,tky+tkh*.6);ctx.stroke();ctx.setLineDash([]);
+    const dp=(t*.6)%1,dpx=cx+w*.2,dpy=h*.22+dp*(h*.18);
+    if(dpy<h*.4){
+      const lg=ctx.createLinearGradient(dpx,dpy-8,dpx,dpy);
+      lg.addColorStop(0,'transparent');lg.addColorStop(1,'rgba(0,229,200,.8)');
+      ctx.strokeStyle=lg;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(dpx,dpy-6);ctx.lineTo(dpx,dpy);ctx.stroke();
+    }
+    ctx.fillStyle='rgba(0,229,200,.5)';ctx.font='8px Share Tech Mono';ctx.textAlign='center';ctx.fillText('CATCHMENT',cx,h*.37);
+    ctx.fillStyle='rgba(0,230,118,.5)';ctx.fillText('REUSE →',tkx-w*.05,tky+tkh*.55);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* CANVAS 4: BEFORE/AFTER */
+(function(){
+  const c=initCanvas('baC',280);if(!c)return;
+  const{ctx}=c;let t=0,bDrops=[],aDrops=[];
+  function W(){return c.cv.width;}function H(){return c.cv.height;}
+  function spawnB(){bDrops.push({x:Math.random()*W()*.44+4,y:-8,vy:2+Math.random()*2});}
+  function spawnA(){aDrops.push({x:W()*.5+4+Math.random()*W()*.44,y:-8,vy:2+Math.random()*2});}
+  function frame(){
+    const w=W(),h=H();ctx.clearRect(0,0,w,h);t+=.016;
+    const half=w*.5;
+    ctx.save();ctx.beginPath();ctx.rect(0,0,half-2,h);ctx.clip();
+    ctx.fillStyle='#040f1c';ctx.fillRect(0,0,half-2,h);
+    const hg=ctx.createLinearGradient(0,h*.48,0,h);hg.addColorStop(0,'#1a0a0a');hg.addColorStop(1,'#100808');
+    ctx.fillStyle=hg;ctx.fillRect(0,h*.48,half-2,h*.52);
+    ctx.fillStyle='rgba(255,80,80,0.6)';ctx.font='bold 8px Orbitron,monospace';ctx.textAlign='center';
+    ctx.fillText('❌ ASPHALT — HEAT & RUNOFF',half*.5,h*.22);
+    if(t*60%12<1.5)spawnB();
+    bDrops=bDrops.filter(d=>{
+      d.y+=d.vy;
+      if(d.y>h*.48){
+        ctx.strokeStyle='rgba(255,80,80,0.5)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(d.x,h*.48);ctx.lineTo(d.x+20,h*.49);ctx.stroke();return false;
+      }
+      const lg=ctx.createLinearGradient(d.x,d.y-12,d.x,d.y);lg.addColorStop(0,'transparent');lg.addColorStop(1,'rgba(100,150,255,0.65)');
+      ctx.strokeStyle=lg;ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(d.x,d.y-10);ctx.lineTo(d.x,d.y);ctx.stroke();return true;
+    });
+    ctx.fillStyle='rgba(255,80,80,0.5)';ctx.font='8px Share Tech Mono';ctx.textAlign='center';ctx.fillText('95% RUNOFF → DRAIN',half*.5,h*.89);
+    ctx.restore();
+    ctx.fillStyle='rgba(0,229,200,0.18)';ctx.fillRect(half-1.5,0,3,h);
+    ctx.fillStyle='rgba(0,229,200,0.8)';ctx.font='bold 9px Orbitron,monospace';ctx.textAlign='center';ctx.fillText('VS',half,h*.52);
+    ctx.save();ctx.beginPath();ctx.rect(half+2,0,w-half-2,h);ctx.clip();
+    ctx.fillStyle='#040f1c';ctx.fillRect(half+2,0,w-half-2,h);
+    const grd=ctx.createLinearGradient(0,h*.48,0,h);grd.addColorStop(0,'#082210');grd.addColorStop(1,'#081e30');
+    ctx.fillStyle=grd;ctx.fillRect(half+2,h*.48,w-half-2,h*.52);
+    ctx.strokeStyle='rgba(0,230,118,0.2)';ctx.lineWidth=1;ctx.strokeRect(half+2,h*.48,w-half-2,h*.52);
+    ctx.fillStyle='rgba(0,229,200,0.6)';ctx.font='bold 8px Orbitron,monospace';ctx.textAlign='center';
+    ctx.fillText('✅ PERMEABLE — ABSORB & STORE',(half+2+w)*.5,h*.22);
+    [.2,.4,.6,.8].forEach((pos,i)=>{
+      const ax=half+2+(w-half-2)*pos,p=Math.sin(t*2+i)*.3+.7;
+      ctx.strokeStyle=`rgba(0,229,200,${p*.5})`;ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(ax,h*.49);ctx.lineTo(ax,h*.62);ctx.moveTo(ax-3.5,h*.58);ctx.lineTo(ax,h*.62);ctx.lineTo(ax+3.5,h*.58);ctx.stroke();
+    });
+    const tmid=(half+2+w)*.5,tky=h*.66,tkw=(w-half)*.55,tkh=h*.17;
+    ctx.strokeStyle='rgba(0,170,255,.4)';ctx.lineWidth=1.5;ctx.strokeRect(tmid-tkw*.5,tky,tkw,tkh);
+    const wl=.45+Math.sin(t*.6)*.1;
+    ctx.fillStyle='rgba(0,229,200,0.22)';ctx.fillRect(tmid-tkw*.5+2,tky+tkh*(1-wl),tkw-4,tkh*wl);
+    ctx.fillStyle='rgba(0,229,200,0.5)';ctx.font='7px Share Tech Mono';ctx.textAlign='center';ctx.fillText('UNDERGROUND TANK',tmid,tky+tkh*.55);
+    if(t*60%10<1.5)spawnA();
+    aDrops=aDrops.filter(d=>{
+      d.y+=d.vy;if(d.y>h*.48)return false;
+      const lg=ctx.createLinearGradient(d.x,d.y-12,d.x,d.y);lg.addColorStop(0,'transparent');lg.addColorStop(1,'rgba(0,229,200,0.65)');
+      ctx.strokeStyle=lg;ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(d.x,d.y-10);ctx.lineTo(d.x,d.y);ctx.stroke();return true;
+    });
+    ctx.fillStyle='rgba(0,230,118,0.5)';ctx.font='8px Share Tech Mono';ctx.textAlign='center';ctx.fillText('100% ABSORBED → STORED',(half+2+w)*.5,h*.89);
+    ctx.restore();
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* CANVAS 5: ROI CHART */
+(function(){
+  const c=initCanvas('chartC',260);if(!c)return;
+  const{ctx}=c;let prog=0,anim=false;
+  function W(){return c.cv.width;}function H(){return c.cv.height;}
+  const yrs=['Y1','Y2','Y3','Y4','Y5','Y6','Y7','Y8','Y9','Y10'];
+  const sav=[8,16,26,38,52,68,82,95,108,120];
+  const cst=[45,45,45,45,46,47,48,49,50,51];
+  const mx=130;
+  new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)anim=true;});},{threshold:.3}).observe(c.cv);
+  function frame(){
+    const w=W(),h=H();ctx.clearRect(0,0,w,h);
+    if(anim)prog=Math.min(1,prog+.014);
+    ctx.fillStyle='#071e35';ctx.fillRect(0,0,w,h);
+    const pL=42,pR=18,pT=28,pB=38,cW=w-pL-pR,cH=h-pT-pB,bW=cW/yrs.length*.3;
+    for(let i=0;i<=4;i++){
+      const gy=pT+cH*(1-i/4);
+      ctx.strokeStyle='rgba(0,229,200,0.07)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL,gy);ctx.lineTo(w-pR,gy);ctx.stroke();
+      ctx.fillStyle='rgba(232,244,255,0.25)';ctx.font='8px Share Tech Mono';ctx.textAlign='right';ctx.fillText((i/4*mx|0)+'K',pL-4,gy+3);
+    }
+    ctx.strokeStyle='rgba(0,229,200,.2)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL,pT+cH);ctx.lineTo(w-pR,pT+cH);ctx.stroke();
+    yrs.forEach((yr,i)=>{
+      const x=pL+cW*(i+.5)/yrs.length,sv=sav[i]*prog,co=cst[i]*prog;
+      const svH=cH*(sv/mx),coH=cH*(co/mx);
+      ctx.fillStyle='rgba(255,100,100,0.4)';ctx.fillRect(x-bW-1.5,pT+cH-coH,bW,coH);
+      const sg=ctx.createLinearGradient(0,pT+cH-svH,0,pT+cH);
+      sg.addColorStop(0,'rgba(0,229,200,0.9)');sg.addColorStop(1,'rgba(0,229,200,0.25)');
+      ctx.fillStyle=sg;ctx.fillRect(x+1.5,pT+cH-svH,bW,svH);
+      ctx.fillStyle='rgba(232,244,255,0.3)';ctx.font='8px Share Tech Mono';ctx.textAlign='center';ctx.fillText(yr,x,pT+cH+14);
+      if(i===6&&prog>.95){
+        ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(x,pT+cH-svH-9,5,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#ffd700';ctx.font='bold 8px Orbitron,monospace';ctx.textAlign='center';ctx.fillText('ROI!',x,pT+cH-svH-20);
+      }
+    });
+    ctx.fillStyle='rgba(0,229,200,0.75)';ctx.fillRect(pL,8,11,9);
+    ctx.fillStyle='rgba(232,244,255,0.5)';ctx.font='8px Rajdhani,sans-serif';ctx.textAlign='left';ctx.fillText('Water Savings (₹K)',pL+15,17);
+    ctx.fillStyle='rgba(255,100,100,0.75)';ctx.fillRect(pL+135,8,11,9);
+    ctx.fillStyle='rgba(232,244,255,0.5)';ctx.fillText('System Cost (₹K)',pL+150,17);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>
